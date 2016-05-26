@@ -1,0 +1,137 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+    <script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.js"></script>
+    <script src="js/jquery.WordSlides.js"></script>
+<style>
+*{margin:0;padding:0;list-style:none;}
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+.dc-container {
+    width: 100%;
+    height: 468px;
+    position: relative;
+
+    /*临时测试用*/
+    margin: 0 auto;
+    top: 50px;
+}
+
+.dc-wrapper {
+    width: 662px;
+    height: 468px;
+    margin: 0 auto;
+    position: relative;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-perspective: 1000px;
+    -moz-perspective: 1000px;
+    -o-perspective: 1000px;
+    -ms-perspective: 1000px;
+    perspective: 1000px;
+}
+
+
+.dc-wrapper > div {
+    width: 662px;
+    height: 468px;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.3);
+
+
+    /*测试用*/
+    font-size: 100px;
+    text-align: center;
+}
+    .button{
+        width: 80px;
+    }
+</style>
+
+</head>
+
+<body>
+<section class="dc-container">
+    <div class="dc-wrapper">
+        
+    </div>
+</section>
+
+<div style="margin-top: 70px;">
+    <!--
+    模式:<input type="button" value="快速" class="button"> <input type="button" value="慢速" class="button">
+    -->
+    <div><input type="button" value="上一页" class="button" id="prev">&nbsp;<input type="button" value="下一页" class="button" id="next">
+        &nbsp;<input type="button" value="追加10页" class="button" id="add">
+    </div>
+
+    <div>跳页:<input type="text" value="" id="moveNum"><input type="button" value="go" id="move"></div>
+
+    <div id="num">总页数:</div>
+</div>
+
+<script>
+
+    $(function () {
+        var randomColor = ['#FF6666','#FF0033','#99CCCC','#99CCFF','#52ade7','#e70012','#FFCC00'];
+
+
+        function getColor() {
+            return randomColor[Math.floor(Math.random()*(randomColor.length))];
+        }
+
+
+        function addPage() {
+            var wrapper = $(".dc-wrapper");
+            var count = wrapper.children('div').length;
+            var addNum = 10;
+            for (var i = 1 ; i <= addNum ; i++){
+                wrapper.append('<div style="background-color: '+ getColor() +';"> ' + (count + i) +' </div>');
+            }
+            $('#num').html('总页数:' + (count + addNum));
+        }
+        //开始先添加10页
+        addPage();
+
+        //实例化插件
+        var testDiv = $('.dc-container').WordSlides();
+
+        $('#next').click(function () {
+            testDiv.WordSlides('next');
+        });
+
+        $('#prev').click(function () {
+            testDiv.WordSlides('prev');
+        });
+
+        $('#move').click(function () {
+            var moveNum = $('#moveNum').val();
+            if (!$.isNumeric(moveNum)){
+                return false;
+            }
+            testDiv.WordSlides('move',Math.floor(moveNum) - 1);
+        });
+
+        $('#add').click(function () {
+            addPage();
+            //更新页面
+            testDiv.WordSlides('update');
+        });
+
+    });
+</script>
+</body>
+</html>
